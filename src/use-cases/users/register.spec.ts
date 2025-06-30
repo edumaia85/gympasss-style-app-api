@@ -1,5 +1,37 @@
-import { test, expect } from "vitest";
+import { expect, it, describe } from "vitest";
+import { RegisterUseCase } from "./register";
+import { compare } from "bcryptjs";
 
-test("check if it works", () => {
-  expect(2 + 2).toBe(4);
+describe("Register use case", async () => {
+  it("should hash user password upon registration", async () => {
+    const registerUseCase = new RegisterUseCase({
+      async findByEmail() {
+        return null;
+      },
+
+      async create(data) {
+        return {
+          id: "ab979c5f-00b6-4cab-bcd6-6aee5540995d",
+          name: data.name,
+          email: data.email,
+          password_hash: data.password_hash,
+          created_at: new Date(),
+          role: data.role!,
+        };
+      },
+    });
+
+    const { user } = await registerUseCase.execute({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "123456",
+    });
+
+    const isPasswordCorrectlyHashed = await compare(
+      "123456",
+      user.password_hash
+    );
+
+    expect(isPasswordCorrectlyHashed).toBe(true);
+  });
 });
