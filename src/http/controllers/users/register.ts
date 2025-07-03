@@ -22,13 +22,13 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
       email,
       password,
     });
-
-    return reply.status(201).send();
   } catch (err) {
     if (err instanceof UserAlreadyExistsError) {
       return reply.status(409).send({ message: err.message });
     }
 
-    return reply.status(500).send(); // TODO: Fix me
+    throw err;
   }
+
+  return reply.status(201).send();
 }
