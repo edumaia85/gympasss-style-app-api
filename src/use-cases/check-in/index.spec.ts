@@ -19,8 +19,8 @@ describe("Check-in Use Case", async () => {
       title: "Unifit",
       description: "",
       phone: "",
-      latitude: new Decimal(0),
-      longitude: new Decimal(0),
+      latitude: new Decimal(-18.7836258),
+      longitude: new Decimal(-42.9319562),
     });
 
     vi.useFakeTimers();
@@ -81,5 +81,25 @@ describe("Check-in Use Case", async () => {
     });
 
     expect(checkIn.id).toEqual(expect.any(String));
+  });
+
+  it("should not be able to check in on a distant gym", async () => {
+    gymsRepository.items.push({
+      id: "gym-02",
+      title: "Powerfit",
+      description: "",
+      phone: "",
+      latitude: new Decimal(-18.675495),
+      longitude: new Decimal(-42.8550432),
+    });
+
+    await expect(() =>
+      sut.execute({
+        gymId: "gym-02",
+        userId: "user-01",
+        userLatitude: -18.7836258,
+        userLongitude: -42.9319562,
+      })
+    ).rejects.toBeInstanceOf(Error);
   });
 });
