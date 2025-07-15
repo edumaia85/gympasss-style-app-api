@@ -5,7 +5,7 @@ import { ZodError } from "zod";
 import { usersRoutes } from "./http/controllers/users/routes";
 import { gymsRoutes } from "./http/controllers/gyms/routes";
 import { env } from "./env";
-import { checkInsRoutes } from "./http/controllers/check-ins/route";
+import { checkInsRoutes } from "./http/controllers/check-ins/routes";
 
 export const app = fastify();
 
